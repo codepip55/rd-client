@@ -1,0 +1,8 @@
+.nav:hover {
+  @apply bg-pblack-700/80 rounded-xl;
+  transition: background-color 400ms ease;
+}
+
+.nav {
+  @apply p-2 cursor-pointer
+}
