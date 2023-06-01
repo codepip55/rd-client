@@ -1,13 +1,13 @@
 <div class="mt-5">
   <div class="text-center text-white custom-container gap-x-5">
-    <div class="flex">
-      <input type="text" class="input-min">
-      <button class="ml-2 px-10 btn">Send</button>
-    </div>
+    <form class="flex" (ngSubmit)="send()" [formGroup]="rdForm">
+      <input type="text" id="input" class="input-min" formControlName="input">
+      <button class="ml-2 px-10 btn" type="submit">Send</button>
+    </form>
 
     <div class="text-pgreen-500 text-left mt-5">
-      <div>SMF_DEP</div>
-      <div>1 SWA1234 3202 5x MCS</div>
+      <div>Own Callsign</div>
+      <div>(List#) (show '+' if accepted) (Callsign) (Transponder Code) (Departure ID) (Exit fix)</div>
       <div>2+SWA1234 3202 5x MCS</div>
       <div>3 SWA1234 3202 5x MCS</div>
     </div>
