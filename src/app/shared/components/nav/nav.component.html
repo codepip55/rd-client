@@ -6,7 +6,8 @@
       </a>
     </div>
     <div class="space-x-4 flex my-auto text-white">
-      <div class="nav">Login</div>
+      <div *ngIf="!isLoggedIn" class="nav" (click)="this.userService.login()">{{ (this.userService.loading$ | async) ? 'Loading': 'Login with VATSIM' }}</div>
+      <div *ngIf="isLoggedIn" class="nav" (click)="this.userService.logout()">{{ (this.userService.loading$ | async) ? 'Loading': currentUser.nameFull }}</div>
     </div>
   </div>
 </div>

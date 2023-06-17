@@ -1,3 +1,5 @@
+<app-alert class="" aria-live="polite" aria-atomic="true"></app-alert>
+<div class="py-4 w-full text-center text-white font-bold bg-slate-600">Site is still under contruction. This is a preview only!</div>
 <body class="flex flex-col">
   <nav class="z-10">
     <app-nav></app-nav>
@@ -6,9 +8,15 @@
     <div class="z-5 hidden sm:block">
       <div id="blob"></div>
     </div>
-    <router-outlet></router-outlet>
+    <router-outlet *ngIf="!(this.userService.loading$ | async)"></router-outlet>
   </main>
   <footer>
     <app-footer></app-footer>
   </footer>
 </body>
+
+<ng-template #loader>
+  <div class="w-full h-full m-auto flex items-center justify-center">
+    <app-spinner></app-spinner>
+  </div>
+</ng-template>

@@ -10,6 +10,16 @@ module.exports = {
         '3xl': '1700px'
       },
       colors: {
+        primary: '#2B2B2B',
+        brand: '#3b8df9',
+        secondaryBrand: '#33cc99',
+        secondary: '#e2e8f0',
+        success: '#0d9488',
+        info: '#06b6d4',
+        warning: '#f59e0b',
+        pending: '#f97316',
+        danger: '#b91c1c',
+        light: '#f1f5f9',
         'pblack': {
           DEFAULT: '#020202',
           '50': '#9B9B9B',

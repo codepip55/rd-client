@@ -1,29 +1,49 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ApiService } from 'src/app/shared/services/api.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { User } from 'src/app/shared/models/user.model';
+import { AlertService } from 'src/app/shared/services/alert.service';
+import { RdService } from 'src/app/shared/services/rd.service';
+import { UserService } from 'src/app/shared/services/user.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, OnDestroy {
 
-  constructor (
-    private fb: FormBuilder,
-    private apiService: ApiService
-  ) {}
+  constructor(
+    public userService: UserService,
+    public rdService: RdService
+  ) { }
+  
+  public isLoggedIn: boolean = false;
+  public currentUser: User;
 
-  rdForm: FormGroup = this.fb.group({
-    input: ['RD ', Validators.required]
-  })
+  private userSub: Subscription;
 
-  get rawInput() { return this.rdForm.value.input.toString().slice(3) }
+  ngOnInit(): void {
+    this.userSub = this.userService.currentUser$.subscribe(u => {
+      this.isLoggedIn = u !== null;
+      if (u !== null) this.currentUser = u;
+    });
 
-  send() {
-    const input = this.rdForm.value.input.toString().slice(3)
-
-    this.apiService.sendAircraft(input)
+    this.findCurrentConnectedController()
   }
 
+  ngOnDestroy(): void {
+    this.userSub.unsubscribe();
+  }
+
+  logon() {
+    let log = this.rdService.logonPosition()
+    console.log(firstValueFrom(log))
+    return log
+  }
+
+  findCurrentConnectedController() {
+    let connection = firstValueFrom(this.rdService.findControllerByCurrentUser())
+    console.log(connection)
+  }
 }

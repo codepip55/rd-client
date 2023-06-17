@@ -5,22 +5,29 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from '../pages/home/home.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { AlertComponent } from './components/alert/alert.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { HttpClientModule } from '@angular/common/http';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @NgModule({
   declarations: [
     NavComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    AlertComponent,
+    SpinnerComponent
   ],
   imports: [
     CommonModule,
-    HttpClientModule,
-    ReactiveFormsModule
+    FontAwesomeModule,
+    HttpClientModule
   ],
   exports: [
     NavComponent,
-    FooterComponent
+    FooterComponent,
+    AlertComponent,
+    SpinnerComponent
   ]
 })
 export class SharedModule { }
