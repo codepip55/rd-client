@@ -32,7 +32,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     this.loadingSub = this.userService.loading$.subscribe(l => {
-      console.log(l)
       this.loading = l;
     })
 
