@@ -10,9 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - id: automerge
-        name: automerge
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create pull request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Auto-merge to cf-pages"
+          title: "Auto-merge to cf-pages"
+          branch: cf-pages
+          base: master
+
+      - name: automerge
+        id: automerge
         uses: "pascalgn/automerge-action@v0.15.6"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-
