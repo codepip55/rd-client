@@ -19,9 +19,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) { }
   
   public isLoggedIn: boolean = false;
+  public loading: boolean = true;
   public currentUser: User;
 
   private userSub: Subscription;
+  private loadingSub: Subscription;
 
   ngOnInit(): void {
     this.userSub = this.userService.currentUser$.subscribe(u => {
@@ -29,11 +31,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (u !== null) this.currentUser = u;
     });
 
+    this.loadingSub = this.userService.loading$.subscribe(l => {
+      console.log(l)
+      this.loading = l;
+    })
+
     this.findCurrentConnectedController()
   }
 
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
+    this.loadingSub.unsubscribe();
   }
 
   logon() {

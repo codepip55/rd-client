@@ -108,6 +108,7 @@ export class UserService {
   }
 
   public silentAuth(initialLoad: boolean = false) {
+    this.loadingSubject.next(true);
     this.http.get<AuthApiResponse>(`${apiUrl}/auth/silent`, { withCredentials: true }).pipe(
       first()
     ).subscribe(

@@ -1,4 +1,4 @@
-<ng-container *ngIf="!(this.userService.loading$ | async); else loader">
+<ng-container *ngIf="!loading; else loader">
   <!-- <div class="mt-5">
     <div class="text-center text-white custom-container gap-x-5">
       <div class="flex">
@@ -16,7 +16,7 @@
   </div> -->
 
   <!-- Assign Self To Position -->
-  <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true" *ngIf="isLoggedIn">
     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
     <div class="fixed inset-0 z-10 overflow-y-auto">
