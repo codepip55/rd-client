@@ -17,7 +17,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           commit-message: "Auto-merge to cf-pages"
           title: "Auto-merge to cf-pages"
           branch: cf-pages
@@ -27,4 +27,4 @@ jobs:
         id: automerge
         uses: "pascalgn/automerge-action@v0.15.6"
         env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GITHUB_TOKEN: "${{ secrets.TOKEN }}"
