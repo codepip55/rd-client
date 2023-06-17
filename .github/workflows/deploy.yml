@@ -1,0 +1,33 @@
+name: Auto Merge to cf-pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create pull request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Auto-merge to cf-pages"
+          title: "Auto-merge to cf-pages"
+          branch: cf-pages
+          base: master
+
+      - name: Merge pull request
+        if: steps.create_pr.outputs.pull-request-number
+        uses: peter-evans/merge-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
+          merge-method: merge
+
