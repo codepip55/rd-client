@@ -41,4 +41,22 @@ export class RdService {
       catchError(err => this.handleError(err, { user: null }, 'logoff position'))
     )
   }
+
+  sendAircraftByCode(code: string) {
+    return this.http.post(`${baseUrl}/rd/aircraft?code=${code}`, {}).pipe(
+      catchError(err => this.handleError(err, { user: null }, 'send aircraft'))
+    )
+  }
+
+  sendAircraftByCallsign(callsign: string) {
+    return this.http.post(`${baseUrl}/rd/aircraft?callsign=${callsign}`, {}).pipe(
+      catchError(err => this.handleError(err, { user: null }, 'send aircraft'))
+    )
+  }
+
+  getControllerList() {
+    return this.http.get(`${baseUrl}/rd/list/${this.userService.currentUser?._id}`).pipe(
+      catchError(err => this.handleError(err, { user: null }, 'get rd list'))
+    )
+  }
 }

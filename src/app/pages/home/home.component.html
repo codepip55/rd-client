@@ -1,14 +1,15 @@
 <ng-container *ngIf="!loading; else loader">
   <div class="mt-5" *ngIf="isConnected && isLoggedIn">
     <div class="text-center text-white custom-container gap-x-5">
-      <div class="flex">
-        <input type="text" class="input-min">
-        <button class="ml-2 px-10 btn">Send</button>
-      </div>
+      <form class="flex" [formGroup]="rdForm" (ngSubmit)="sendAircraft()">
+        <input type="text" class="input-min" formControlName="input">
+        <button class="ml-2 px-10 btn" type="submit">Send</button>
+      </form>
       <div class="text-left text-sm text-slate-400 underline cursor-pointer" (click)="logoff()">Logoff</div>
   
       <div class="text-pgreen-500 text-left mt-5">
         <div>{{ callsign }}</div>
+        <div *ngFor="let ac of rdList; index as i">{{ i + 1 }}{{ ac['accepted'] ? '+' : ' '}}{{ ac['callsign'] }} {{ ac['transponder'] }} 5x MCS</div>
       </div>
     </div>
   </div>
