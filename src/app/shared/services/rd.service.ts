@@ -36,4 +36,9 @@ export class RdService {
     )
   }
 
+  logoffPosition() {
+    return this.http.post(`${baseUrl}/positions/logoff`, {}).pipe(
+      catchError(err => this.handleError(err, { user: null }, 'logoff position'))
+    )
+  }
 }

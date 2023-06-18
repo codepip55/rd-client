@@ -22,13 +22,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   public loading: boolean = true;
   public currentUser: User;
 
+  public isConnected: boolean = false;
+  public callsign: string | undefined | null;
+
   private userSub: Subscription;
   private loadingSub: Subscription;
 
   ngOnInit(): void {
     this.userSub = this.userService.currentUser$.subscribe(u => {
       this.isLoggedIn = u !== null;
+      this.isConnected = u?.currentPosition !== null;
       if (u !== null) this.currentUser = u;
+      if (u?.currentPosition !== null) this.callsign = u?.currentPosition
     });
 
     this.loadingSub = this.userService.loading$.subscribe(l => {
@@ -43,14 +48,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loadingSub.unsubscribe();
   }
 
-  logon() {
-    let log = this.rdService.logonPosition()
-    console.log(firstValueFrom(log))
+  async logon() {
+    let log = await firstValueFrom(this.rdService.logonPosition())
+    this.isConnected = true;
+    // @ts-expect-error
+    this.callsign = log.currentPosition;
     return log
   }
 
-  findCurrentConnectedController() {
-    let connection = firstValueFrom(this.rdService.findControllerByCurrentUser())
+  async findCurrentConnectedController() {
+    let connection = await firstValueFrom(this.rdService.findControllerByCurrentUser())
     console.log(connection)
   }
+
+  async logoff() {
+    let log = await firstValueFrom(this.rdService.logoffPosition())
+    this.isConnected = false;
+    this.callsign = null;
+    return log
+  }
+
 }
