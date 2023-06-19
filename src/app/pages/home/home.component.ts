@@ -89,13 +89,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (isTransponderCode) {
       const res = await firstValueFrom(this.rdService.sendAircraftByCode(input!.slice(-4)));
-      this.alertService.add({ type: 'success', message: 'Aircraft added' })
+      // @ts-ignore
+      if (res.rd !== null) this.alertService.add({ type: 'success', message: 'Aircraft added' })
     }
 
     if (!isTransponderCode) {
       const res = await firstValueFrom(this.rdService.sendAircraftByCallsign(input!.slice(3)))
-      this.alertService.add({ type: 'success', message: 'Aircraft added' })
+      // @ts-ignore
+      if (res.rd !== null) this.alertService.add({ type: 'success', message: 'Aircraft added' })
     }
+
+    this.getControllerList()
 
     this.rdForm.patchValue({
       input: "RD "

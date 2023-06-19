@@ -20,7 +20,7 @@ export class RdService {
 
   private handleError<T>(err: any, res: T, action: string): Observable<T> {
     console.error(err);
-    this.alertService.add({ type: 'warning', message: `Could not ${action}` });
+    this.alertService.add({ type: 'warning', message: err.error.message ? err.error.message : `Could not ${action}` });
     return of(res);
   }
 
@@ -44,19 +44,19 @@ export class RdService {
 
   sendAircraftByCode(code: string) {
     return this.http.post(`${baseUrl}/rd/aircraft?code=${code}`, {}).pipe(
-      catchError(err => this.handleError(err, { user: null }, 'send aircraft'))
+      catchError(err => this.handleError(err, { rd: null, vatsim: {} }, 'send aircraft'))
     )
   }
 
   sendAircraftByCallsign(callsign: string) {
     return this.http.post(`${baseUrl}/rd/aircraft?callsign=${callsign}`, {}).pipe(
-      catchError(err => this.handleError(err, { user: null }, 'send aircraft'))
+      catchError(err => this.handleError(err, { rd: null, vatsim: {} }, 'send aircraft'))
     )
   }
 
   getControllerList() {
     return this.http.get(`${baseUrl}/rd/list/${this.userService.currentUser?._id}`).pipe(
-      catchError(err => this.handleError(err, { user: null }, 'get rd list'))
+      catchError(err => this.handleError(err, { list: null }, 'get rd list'))
     )
   }
 }
