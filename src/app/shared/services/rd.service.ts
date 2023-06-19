@@ -60,4 +60,16 @@ export class RdService {
       catchError(err => this.handleError(err, { count: 0, data: null }, 'get rd list'))
     )
   }
+
+  acceptAircraftByCode(code: string) {
+    return this.http.put(`${baseUrl}/rd/aircraft/accept?code=${code}`, {}).pipe(
+      catchError(err => this.handleError(err, { aircraft: null }, 'accept aircraft'))
+    )
+  }
+
+  acceptAircraftByCallsign(callsign: string) {
+    return this.http.put(`${baseUrl}/rd/aircraft/accept?callsign=${callsign}`, {}).pipe(
+      catchError(err => this.handleError(err, { aircraft: null }, 'accept aircraft'))
+    )
+  }
 }

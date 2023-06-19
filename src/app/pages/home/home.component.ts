@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.rdList = list.data!.sort((a, b) => {
       return new Date(a['addedTimestamp']).getTime() - new Date(b['addedTimestamp']).getTime()
     })
-    
+
     this.rdCount = list.count
     console.log(list)
   }
@@ -101,15 +101,21 @@ export class HomeComponent implements OnInit, OnDestroy {
     const isTransponderCode = regex.test(input!);
 
     if (isTransponderCode) {
-      const res = await firstValueFrom(this.rdService.sendAircraftByCode(input!.slice(-4)));
-      // @ts-ignore
-      if (res.rd !== null) this.alertService.add({ type: 'success', message: 'Aircraft added' })
+      if (this.callsign?.endsWith("TWR")) {
+        const res = await firstValueFrom(this.rdService.sendAircraftByCode(input!.slice(-4)));
+      }
+      if (this.callsign?.endsWith("DEP") || this.callsign?.endsWith("APP")) {
+        const res = await firstValueFrom(this.rdService.acceptAircraftByCode(input!.slice(-4)))
+      }
     }
 
     if (!isTransponderCode) {
-      const res = await firstValueFrom(this.rdService.sendAircraftByCallsign(input!.slice(3)))
-      // @ts-ignore
-      if (res.rd !== null) this.alertService.add({ type: 'success', message: 'Aircraft added' })
+      if (this.callsign?.endsWith("TWR")) {
+        const res = await firstValueFrom(this.rdService.sendAircraftByCallsign(input!.slice(3)))
+      }
+      if (this.callsign?.endsWith("DEP") || this.callsign?.endsWith("APP")) {
+        const res = await firstValueFrom(this.rdService.acceptAircraftByCallsign(input!.slice(3)))
+      }
     }
 
     this.rdForm.patchValue({

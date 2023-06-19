@@ -11,5 +11,5 @@
 }
 
 .flash-text {
-  animation: flash 1s linear infinite;
+  animation: flash 1s steps(1, start) infinite;
 }
