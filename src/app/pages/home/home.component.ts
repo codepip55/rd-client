@@ -45,7 +45,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.loading = l;
     })
 
-    this.getControllerList()
+    setInterval(() => {
+      if (this.isConnected && this.isLoggedIn) this.getControllerList()
+    }, 1000)
   }
 
   async getControllerList() {
@@ -64,9 +66,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   async logon() {
     let log = await firstValueFrom(this.rdService.logonPosition())
-    this.isConnected = true;
-    // @ts-expect-error
-    this.callsign = log.currentPosition;
+    console.log(log)
+    // @ts-ignore
+    if (log.user !== null) {
+      this.isConnected = true
+      // @ts-expect-error
+      this.callsign = log.currentPosition
+    };
     return log
   }
 
@@ -98,8 +104,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       // @ts-ignore
       if (res.rd !== null) this.alertService.add({ type: 'success', message: 'Aircraft added' })
     }
-
-    this.getControllerList()
 
     this.rdForm.patchValue({
       input: "RD "
