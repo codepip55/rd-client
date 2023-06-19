@@ -6,6 +6,7 @@ import { RdService } from 'src/app/shared/services/rd.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Aircraft } from 'src/app/shared/models/aircraft.model';
 
 @Component({
   selector: 'app-home',
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private loadingSub: Subscription;
 
   public rdList: Record<string, any>[];
+  private rdCount: number;
 
   ngOnInit(): void {
     this.userSub = this.userService.currentUser$.subscribe(u => {
@@ -45,15 +47,22 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.loading = l;
     })
 
-    this.getControllerList()
+    setInterval(() => {
+      if (this.isConnected && this.isLoggedIn) this.getControllerList()
+    }, 2000)
+
   }
 
   async getControllerList() {
     let list = await firstValueFrom(this.rdService.getControllerList())
-    // @ts-ignore
-    this.rdList = list.data.sort((a, b) => {
+
+    if (this.rdCount < list.count) this.playNotification()
+
+    this.rdList = list.data!.sort((a, b) => {
       return new Date(a['addedTimestamp']).getTime() - new Date(b['addedTimestamp']).getTime()
     })
+
+    this.rdCount = list.count
     console.log(list)
   }
 
@@ -64,9 +73,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   async logon() {
     let log = await firstValueFrom(this.rdService.logonPosition())
-    this.isConnected = true;
-    // @ts-expect-error
-    this.callsign = log.currentPosition;
+    console.log(log)
+    // @ts-ignore
+    if (log.user !== null) {
+      this.isConnected = true
+      // @ts-expect-error
+      this.callsign = log.currentPosition
+    };
     return log
   }
 
@@ -88,18 +101,33 @@ export class HomeComponent implements OnInit, OnDestroy {
     const isTransponderCode = regex.test(input!);
 
     if (isTransponderCode) {
-      const res = await firstValueFrom(this.rdService.sendAircraftByCode(input!.slice(-4)));
-      this.alertService.add({ type: 'success', message: 'Aircraft added' })
+      if (this.callsign?.endsWith("TWR")) {
+        const res = await firstValueFrom(this.rdService.sendAircraftByCode(input!.slice(-4)));
+      }
+      if (this.callsign?.endsWith("DEP") || this.callsign?.endsWith("APP")) {
+        const res = await firstValueFrom(this.rdService.acceptAircraftByCode(input!.slice(-4)))
+      }
     }
 
     if (!isTransponderCode) {
-      const res = await firstValueFrom(this.rdService.sendAircraftByCallsign(input!.slice(3)))
-      this.alertService.add({ type: 'success', message: 'Aircraft added' })
+      if (this.callsign?.endsWith("TWR")) {
+        const res = await firstValueFrom(this.rdService.sendAircraftByCallsign(input!.slice(3)))
+      }
+      if (this.callsign?.endsWith("DEP") || this.callsign?.endsWith("APP")) {
+        const res = await firstValueFrom(this.rdService.acceptAircraftByCallsign(input!.slice(3)))
+      }
     }
 
     this.rdForm.patchValue({
       input: "RD "
     })
+  }
+
+  playNotification() {
+    const audio = new Audio()
+    audio.src = '../../assets/notification.wav'
+    audio.load()
+    audio.play()
   }
 
 }
