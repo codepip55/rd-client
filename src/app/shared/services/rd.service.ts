@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AlertService } from './alert.service';
 import { Observable, catchError, of } from 'rxjs';
 import { UserService } from './user.service';
+import { Aircraft } from '../models/aircraft.model';
 
 const baseUrl = environment.apiBaseUrl;
 
@@ -55,8 +56,8 @@ export class RdService {
   }
 
   getControllerList() {
-    return this.http.get(`${baseUrl}/rd/list/${this.userService.currentUser?._id}`).pipe(
-      catchError(err => this.handleError(err, { list: null }, 'get rd list'))
+    return this.http.get<{ count: number, data: Aircraft[] | null }>(`${baseUrl}/rd/list/${this.userService.currentUser?._id}`).pipe(
+      catchError(err => this.handleError(err, { count: 0, data: null }, 'get rd list'))
     )
   }
 }

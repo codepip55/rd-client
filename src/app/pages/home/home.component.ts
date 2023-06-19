@@ -6,6 +6,7 @@ import { RdService } from 'src/app/shared/services/rd.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Aircraft } from 'src/app/shared/models/aircraft.model';
 
 @Component({
   selector: 'app-home',
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private loadingSub: Subscription;
 
   public rdList: Record<string, any>[];
+  private rdCount: number;
 
   ngOnInit(): void {
     this.userSub = this.userService.currentUser$.subscribe(u => {
@@ -47,15 +49,20 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     setInterval(() => {
       if (this.isConnected && this.isLoggedIn) this.getControllerList()
-    }, 1000)
+    }, 2000)
+
   }
 
   async getControllerList() {
     let list = await firstValueFrom(this.rdService.getControllerList())
-    // @ts-ignore
-    this.rdList = list.data.sort((a, b) => {
+
+    if (this.rdCount < list.count) this.playNotification()
+
+    this.rdList = list.data!.sort((a, b) => {
       return new Date(a['addedTimestamp']).getTime() - new Date(b['addedTimestamp']).getTime()
     })
+    
+    this.rdCount = list.count
     console.log(list)
   }
 
@@ -108,6 +115,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.rdForm.patchValue({
       input: "RD "
     })
+  }
+
+  playNotification() {
+    const audio = new Audio()
+    audio.src = '../../assets/notification.wav'
+    audio.load()
+    audio.play()
   }
 
 }
