@@ -9,7 +9,7 @@
   
       <div class="text-pgreen-500 text-left mt-5">
         <div>{{ callsign }}</div>
-        <div *ngFor="let ac of rdList; index as i" [class.flash-text]="!ac['accepted']">{{ i + 1 }}{{ ac['accepted'] ? '+' : ' '}}{{ ac['callsign'] }} {{ ac['transponder'] }} 5x MCS</div>
+        <div *ngFor="let ac of rdList; index as i" [class.flash-text]="!ac['accepted']">{{ i + 1 }}{{ ac['accepted'] ? '+' : ' '}}{{ ac['callsign'] }} {{ ac['transponder'] }} WIP WIP</div>
       </div>
     </div>
   </div>
