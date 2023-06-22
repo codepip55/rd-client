@@ -8,7 +8,7 @@
     <div class="z-5 hidden sm:block">
       <div id="blob"></div>
     </div>
-    <router-outlet *ngIf="!(this.userService.loading$ | async)"></router-outlet>
+    <router-outlet *ngIf="!(this.userService.loading$ | async); else loader"></router-outlet>
   </main>
   <footer>
     <app-footer></app-footer>
