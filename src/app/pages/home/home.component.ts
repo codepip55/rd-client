@@ -63,7 +63,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
 
     this.rdCount = list.count
-    console.log(list)
   }
 
   ngOnDestroy(): void {
@@ -73,7 +72,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   async logon() {
     let log = await firstValueFrom(this.rdService.logonPosition())
-    console.log(log)
     // @ts-ignore
     if (log.user !== null) {
       this.isConnected = true
@@ -102,19 +100,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (isTransponderCode) {
       if (this.callsign?.endsWith("TWR")) {
-        const res = await firstValueFrom(this.rdService.sendAircraftByCode(input!.slice(-4)));
+        await firstValueFrom(this.rdService.sendAircraftByCode(input!.slice(-4)));
       }
       if (this.callsign?.endsWith("DEP") || this.callsign?.endsWith("APP")) {
-        const res = await firstValueFrom(this.rdService.acceptAircraftByCode(input!.slice(-4)))
+        await firstValueFrom(this.rdService.acceptAircraftByCode(input!.slice(-4)))
       }
     }
 
     if (!isTransponderCode) {
       if (this.callsign?.endsWith("TWR")) {
-        const res = await firstValueFrom(this.rdService.sendAircraftByCallsign(input!.slice(3)))
+        await firstValueFrom(this.rdService.sendAircraftByCallsign(input!.slice(3)))
       }
       if (this.callsign?.endsWith("DEP") || this.callsign?.endsWith("APP")) {
-        const res = await firstValueFrom(this.rdService.acceptAircraftByCallsign(input!.slice(3)))
+        await firstValueFrom(this.rdService.acceptAircraftByCallsign(input!.slice(3)))
       }
     }
 
